@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Aida 💘 ¿Quieres ser mi San Valentín?</title>
+  <style>
+    :root{
+      --bg1:#ffeff6; --bg2:#fff7e8; --card:#ffffffcc; --text:#1f1f1f;
+      --accent:#ff3b7a; --accent2:#7c3aed;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0; min-height:100vh; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      color:var(--text);
+      background: radial-gradient(1200px 700px at 20% 10%, var(--bg1), transparent 60%),
+                  radial-gradient(900px 600px at 90% 30%, var(--bg2), transparent 55%),
+                  linear-gradient(120deg, #fff, #fff);
+      overflow-x:hidden;
+      display:flex; align-items:center; justify-content:center;
+      padding:24px;
+    }
+    .card{
+      width:min(720px, 100%);
+      background:var(--card);
+      backdrop-filter: blur(10px);
+      border:1px solid #ffffff;
+      border-radius:24px;
+      box-shadow: 0 18px 60px rgba(0,0,0,.10);
+      padding:28px;
+      position:relative;
+    }
+    .badge{
+      display:inline-flex; gap:10px; align-items:center;
+      padding:8px 12px;
+      border-radius:999px;
+      background:linear-gradient(90deg, rgba(255,59,122,.12), rgba(124,58,237,.10));
+      border:1px solid rgba(255,59,122,.18);
+      font-size:14px;
+    }
+    .dot{width:10px;height:10px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 6px rgba(255,59,122,.14)}
+    h1{margin:14px 0 8px; font-size: clamp(28px, 4vw, 44px); line-height:1.05;}
+    p{margin:0 0 18px; font-size: clamp(16px, 2.1vw, 18px); opacity:.9}
+    .names{
+      display:flex; flex-wrap:wrap; gap:10px; align-items:center; margin:10px 0 22px;
+      font-weight:700;
+    }
+    .pill{
+      padding:10px 14px; border-radius:999px; border:1px solid rgba(0,0,0,.08);
+      background:#fff; box-shadow: 0 10px 22px rgba(0,0,0,.06);
+    }
+    .pill strong{color:var(--accent)}
+    .actions{display:flex; flex-wrap:wrap; gap:14px; margin-top:14px}
+    button{
+      border:0; cursor:pointer;
+      padding:14px 18px;
+      border-radius:16px;
+      font-weight:800;
+      font-size:16px;
+      transition: transform .12s ease, box-shadow .12s ease;
+      user-select:none;
+    }
+    .yes{
+      background:linear-gradient(135deg, var(--accent), #ff7aa6);
+      color:white;
+      box-shadow:0 14px 28px rgba(255,59,122,.28);
+    }
+    .yes:active{transform: translateY(1px) scale(.99)}
+    .no{
+      background:#ffffff;
+      border:1px solid rgba(0,0,0,.10);
+      box-shadow:0 12px 26px rgba(0,0,0,.08);
+      position:relative;
+    }
+    .no:hover{transform: translateY(-1px)}
+    .note{
+      margin-top:18px;
+      padding:14px 16px;
+      border-radius:16px;
+      background:rgba(124,58,237,.06);
+      border:1px dashed rgba(124,58,237,.25);
+      font-size:14px;
+    }
+    .footer{
+      margin-top:18px; font-size:12px; opacity:.7;
+      display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap;
+    }
+    .hearts{
+      position:absolute; inset:0; pointer-events:none; overflow:hidden; border-radius:24px;
+    }
+    .heart{
+      position:absolute;
+      width:14px; height:14px;
+      transform: rotate(45deg);
+      background: var(--accent);
+      opacity:.18;
+      animation: float 7s linear infinite;
+    }
+    .heart:before,.heart:after{
+      content:"";
+      position:absolute;
+      width:14px; height:14px;
+      border-radius:50%;
+      background: var(--accent);
+      left:-7px; top:0;
+    }
+    .heart:after{left:0; top:-7px}
+    @keyframes float{
+      from{transform: translateY(30px) rotate(45deg)}
+      to{transform: translateY(-820px) rotate(45deg)}
+    }
+
+    /* modal */
+    dialog{
+      border:0;
+      border-radius:22px;
+      padding:0;
+      width:min(520px, 92vw);
+      box-shadow:0 22px 80px rgba(0,0,0,.25);
+    }
+    dialog::backdrop{background: rgba(0,0,0,.35)}
+    .modal{
+      padding:22px 22px 18px;
+      background: white;
+    }
+    .modal h2{margin:0 0 8px; font-size:28px}
+    .modal p{margin:0 0 16px}
+    .modal .row{display:flex; gap:12px; flex-wrap:wrap}
+    .small{
+      font-size:13px; opacity:.75; margin-top:8px
+    }
+    a.link{
+      color:var(--accent2);
+      text-decoration:none;
+      font-weight:700;
+    }
+  </style>
+</head>
+<body>
+  <main class="card" aria-label="Invitación de San Valentín">
+    <div class="hearts" id="hearts"></div>
+
+    <div class="badge"><span class="dot"></span> Mensaje para mi niña, la que mejora mis dias, el arcoiris al final de la tomenta.</div>
+    <h1>Aida  ¿quieres ser mi San Valentín?</h1>
+    <p>
+      No necesito una fecha para elegirte… pero sí una para celebrarte.
+      ¿Me das el sí más bonito?
+    </p>
+
+    <div class="names">
+      <div class="pill">Para: <strong>Aida</strong></div>
+      <div class="pill">De: <span id="fromName">Saul </span> ✨</div>
+      <div class="pill">Día: <span id="dateText"></span></div>
+    </div>
+
+    <div class="actions">
+      <button class="yes" id="yesBtn">Sí, obvio 💖</button>
+      <button class="no" id="noBtn">Mmm… déjame pensarlo 😅</button>
+    </div>
+
+    <div class="note">
+      TE AMO, AIDA.
+Nunca olvides lo muchísimo que te amo, mi niña linda. Admiro la gran mujer que eres: mi novia, mi mejor amiga, mi futura esposa y, si la vida nos lo permite, la madre de mis hijos.
+Te amo con todo el corazón, con una fuerza que no cabe en palabras… como si el infinito pudiera volverse aún más grande.
+Te amo como el sol ama a la luna, como el Popocatépetl ama a la Iztaccíhuatl.
+Mi amor por ti es como un límite que nunca se termina: jamás toca el final.
+Eres la constante que quiero para siempre en mi vida, la exponencial que hace mejores mis días.
+Eres la oferta perfecta para mi demanda, la microeconomía que le da sentido a mi macroeconomía.
+
+    </div>
+
+    <div class="footer">
+      <span>Hecho con 💗 para yayita</span>
+      <span>PD: casate conmigo :3</span>
+    </div>
+  </main>
+
+  <dialog id="modal">
+    <div class="modal">
+      <h2>¡TAMOOOOOOOOO! 🎉💞</h2>
+      <p>
+        <b>Aida</b>, Prometo una cita bonita: risas, abrazos y tu postre favorito… porque, siendo filosóficos, la vida es absurdamente corta y el tiempo no pide permiso.
+Así que antes de que el universo nos recuerde lo mortales que somos, mejor gastemos nuestros minutos en besos y en elegir el postre. 😌🍰💘
+        
+      </p>
+      <div class="row">
+        <button class="yes" id="closeBtn">Cerrar 💘</button>
+        <button class="no" id="copyBtn">Copiar mensaje 📋</button>
+      </div>
+      <div class="small">
+         Aida, tus ojos son mi lugar favorito… en ellos encuentro paz, amor y todo lo que necesito.
+        
+      </div>
+    </div>
+  </dialog>
+
+  <script>
+    // Fecha (14 de febrero del año actual)
+    const now = new Date();
+    const year = now.getFullYear();
+    const target = new Date(year, 1, 14); // 1 = febrero
+    const opts = { day: "numeric", month: "long", year: "numeric" };
+    document.getElementById("dateText").textContent = target.toLocaleDateString("es-MX", opts);
+
+    // Nombre "De:" por query param ?de=
+    const params = new URLSearchParams(location.search);
+    const de = params.get("de");
+    if (de) document.getElementById("fromName").textContent = de;
+
+    // Corazones flotando
+    const hearts = document.getElementById("hearts");
+    const makeHeart = () => {
+      const h = document.createElement("div");
+      h.className = "heart";
+      const left = Math.random() * 100;
+      const size = 10 + Math.random() * 18;
+      const delay = Math.random() * 2;
+      const dur = 5 + Math.random() * 6;
+      h.style.left = left + "%";
+      h.style.bottom = "-40px";
+      h.style.width = h.style.height = size + "px";
+      h.style.animationDuration = dur + "s";
+      h.style.animationDelay = delay + "s";
+      hearts.appendChild(h);
+      setTimeout(() => h.remove(), (dur + delay) * 1000);
+    };
+    for (let i=0;i<18;i++) makeHeart();
+    setInterval(makeHeart, 650);
+
+    // Botón NO se mueve (tímido)
+    const noBtn = document.getElementById("noBtn");
+    noBtn.addEventListener("mouseenter", () => {
+      const card = document.querySelector(".card");
+      const rect = card.getBoundingClientRect();
+      const btnRect = noBtn.getBoundingClientRect();
+      const maxX = rect.width - btnRect.width - 24;
+      const maxY = rect.height - btnRect.height - 24;
+
+      const x = Math.max(16, Math.min(maxX, Math.random() * maxX));
+      const y = Math.max(120, Math.min(maxY, 120 + Math.random() * (maxY - 120)));
+
+      noBtn.style.position = "absolute";
+      noBtn.style.left = x + "px";
+      noBtn.style.top = y + "px";
+    });
+
+    // Modal con "Sí"
+    const modal = document.getElementById("modal");
+    document.getElementById("yesBtn").addEventListener("click", () => {
+      modal.showModal();
+      confettiBurst();
+      buildWhatsApp();
+    });
+    document.getElementById("closeBtn").addEventListener("click", () => modal.close());
+
+    // Copiar mensaje
+    const copyBtn = document.getElementById("copyBtn");
+    copyBtn.addEventListener("click", async () => {
+      const msg = buildMessage();
+      try{
+        await navigator.clipboard.writeText(msg);
+        copyBtn.textContent = "¡Copiado! ✅";
+        setTimeout(()=>copyBtn.textContent="Copiar mensaje 📋", 1400);
+      }catch(e){
+        alert("No se pudo copiar automáticamente. Aquí está el mensaje:\n\n" + msg);
+      }
+    });
+
+    function buildMessage(){
+      const from = document.getElementById("fromName").textContent;
+      return `Aida 💘\n¿Quieres ser mi San Valentín? 🌹\n\nCon cariño,\n${from}`;
+    }
+
+    function buildWhatsApp(){
+      const link = document.getElementById("waLink");
+      const text = encodeURIComponent(buildMessage());
+      link.href = `https://wa.me/?text=${text}`;
+    }
+
+    // Confetti simple (sin librerías)
+    function confettiBurst(){
+      const n = 80;
+      for(let i=0;i<n;i++){
+        const s = document.createElement("span");
+        s.style.position="fixed";
+        s.style.left=(Math.random()*100)+"vw";
+        s.style.top="-10px";
+        s.style.width="8px";
+        s.style.height="12px";
+        s.style.borderRadius="2px";
+        s.style.background = `hsl(${Math.random()*360}, 90%, 60%)`;
+        s.style.opacity="0.9";
+        s.style.zIndex="9999";
+        document.body.appendChild(s);
+
+        const x = (Math.random()*2-1) * 220;
+        const y = 700 + Math.random()*300;
+        const rot = (Math.random()*720-360);
+
+        s.animate([
+          { transform:`translate(0,0) rotate(0deg)` },
+          { transform:`translate(${x}px, ${y}px) rotate(${rot}deg)` }
+        ], { duration: 1200 + Math.random()*700, easing:"cubic-bezier(.2,.8,.2,1)" });
+
+        setTimeout(()=>s.remove(), 2200);
+      }
+    }
+  </script>
+</body>
+</html>
+
